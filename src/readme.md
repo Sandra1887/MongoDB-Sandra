@@ -77,7 +77,7 @@ by Sandra Jeppsson Kristiansson
 
 + *^6. Receives the name(String) that you want to update and the name(String) that you want to change*
 *it to. Then adds the "nameToUpdate" to a new document and the "nameToAdd" to another. Next step*
-*it uses the MongoCollection's method "findOneAndReplace" to change the old name with the new one.*
+*it uses the MongoCollection's method "findOneAndReplace" to replace the old name with the new one.*
 
 
 + *^7. Receives the id(String) that is wished to remove. Then adds the id to a new document which is*
