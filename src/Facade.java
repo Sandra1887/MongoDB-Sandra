@@ -11,39 +11,39 @@ import java.util.ArrayList;
 
 public class Facade {
 
-    MongoClient mongoCl;
-    MongoDatabase mongoDb;
-    MongoCollection<Document> mongoColl;
-    String connStr;
-    String collName;
-    String dBName;
+    MongoClient mongoClient;
+    MongoDatabase mongoDatabase;
+    MongoCollection<Document> mongoCollection;
+    String connectionString;
+    String collectionName;
+    String databaseName;
 
-    public Facade(String connStr, String dBName, String collName) {
-        setConnStr(connStr);
-        setdBName(dBName);
-        setCollName(collName);
+    public Facade(String connectionString, String databaseName, String collectionName) {
+        setConnectionString(connectionString);
+        setDatabaseName(databaseName);
+        setCollectionName(collectionName);
         connectToMongoServer();
     }
     public Facade() {
         connectToMongoServer();
     }
-    public String getConnStr() {
-        return connStr;
+    public String getConnectionString() {
+        return connectionString;
     }
-    public void setConnStr(String connStr) {
-        this.connStr = connStr;
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
     }
-    public String getCollName() {
-        return collName;
+    public String getCollectionName() {
+        return collectionName;
     }
-    public void setCollName(String collName) {
-        this.collName = collName;
+    public void setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
     }
-    public String getdBName() {
-        return dBName;
+    public String getDatabaseName() {
+        return databaseName;
     }
-    public void setdBName(String dBName) {
-        this.dBName = dBName;
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
     public void connectToMongoServer() {
         ServerApi serverApi = ServerApi.builder()
@@ -51,15 +51,15 @@ public class Facade {
                 .build();
 
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(connStr))
+                .applyConnectionString(new ConnectionString(connectionString))
                 .serverApi(serverApi)
                 .build();
 
         try {
-            mongoCl = MongoClients.create(settings);
-            mongoDb = mongoCl.getDatabase(dBName);
-            mongoColl = mongoDb.getCollection(collName);
-            System.out.println("Connected to DB: " + dBName);
+            mongoClient = MongoClients.create(settings);
+            mongoDatabase = mongoClient.getDatabase(databaseName);
+            mongoCollection = mongoDatabase.getCollection(collectionName);
+            System.out.println("Connected to DB: " + databaseName);
         } catch (Exception mongo) {
             System.out.println("Failed to connect");
             System.out.println(mongo.getMessage());
@@ -69,20 +69,20 @@ public class Facade {
         Document doc = person.toDoc();
         doc.remove("_id");
 
-        var find = mongoColl.find(doc);
+        var find = mongoCollection.find(doc);
         if (find.first() == null) {
-            mongoColl.insertOne(doc);
+            mongoCollection.insertOne(doc);
         }
     }
     public void readPersons() {
-        FindIterable<Document> result = mongoColl.find();
+        FindIterable<Document> result = mongoCollection.find();
         for(Document res : result) {
             System.out.println(res.toJson());
         }
     }
     public ArrayList<Person> findByName(String name) {
         Document doc = new Document("name", name);
-        FindIterable<Document> result = mongoColl.find(doc);
+        FindIterable<Document> result = mongoCollection.find(doc);
         ArrayList<Person> persons = new ArrayList<>();
 
         result.forEach(person -> persons.add(Person.fromDoc(person)));
@@ -90,18 +90,18 @@ public class Facade {
     }
     public Person findById(String id) {
         Document doc = new Document("id", id);
-        Document search = mongoColl.find(doc).first();
+        Document search = mongoCollection.find(doc).first();
         return Person.fromDoc(search);
     }
 
-    public void updatePerson(String nameToRemove, String nameToAdd) {
-        Document doc = new Document("name", nameToRemove);
+    public void updatePerson(String nameToUpdate, String nameToAdd) {
+        Document doc = new Document("name", nameToUpdate);
         Document update = new Document("name", nameToAdd);
-        mongoColl.findOneAndReplace(doc, update);
+        mongoCollection.findOneAndReplace(doc, update);
     }
 
     public void deletePerson(String id) {
         Document doc = new Document("id", id);
-        mongoColl.deleteOne(doc);
+        mongoCollection.deleteOne(doc);
     }
 }

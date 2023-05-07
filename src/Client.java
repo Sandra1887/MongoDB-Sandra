@@ -12,7 +12,6 @@ public class Client extends Person{
         set_customerId(customerId);
     }
 
-
     public String get_customerId() {
         return _customerId;
     }
