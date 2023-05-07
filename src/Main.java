@@ -1,25 +1,25 @@
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        System.out.println("Welcome to MongoDB!");
+        Logger.getLogger("org.mongodb.driver")
+                .setLevel(Level.SEVERE);
 
-        //Skapa en main-metod där du skapar ett antal Person-objekt, Kund-objekt och Anställd-objekt
-        // och sedan sparar dem i MongoDB-fasad. Du kan sedan uppdatera och ta bort dem från databasen.
+        Facade mongoFacade = new Facade("mongodb://localhost:27017", "Football",
+                "footballPeople");
 
-        //Tänk på att om programmet inte kan hitta en nyckel till servern, ska den utgå ifrån
-        // att connectionstring är mongodb://localhost:27017/{dinDatabas}
+        Person person;
+        Client client;
+        Employee employee;
 
-        //I Readmefilen ska det finnas förklaringar till alla MongoDB-anrop i MongoDB-fasaden.
-
-        Facade mongoFacade = new Facade("mixedPersons", "Persons");
-        Person sandra = new Person("Sandra", "30", "Göteborgsgatan 1");
-        Client mongo1 = new Client("Mongo1", "10", "Stockholmsgatan 2", "1");
-        Employee mongo2 = new Employee("Mongo2", "11", "Skånegatan 3", "3");
-        mongoFacade.insertOnePerson(sandra);
-        mongoFacade.insertOnePerson(mongo1);
-        mongoFacade.insertOnePerson(mongo2);
-
-
-
+        person = new Person("Zlatan Ibrahimovic", "40", "Milanogatan 2");
+        mongoFacade.insertOne(person);
+        client = new Client("Olof Mellberg", "45", "Londonstreet 3", "7");
+        mongoFacade.insertOne(client);
+        employee = new Employee("Bollkalle", "10", "Linjegatan 4", "11");
+        mongoFacade.insertOne(employee);
 
     }
 }

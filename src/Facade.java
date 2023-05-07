@@ -1,5 +1,4 @@
 import com.mongodb.client.*;
-import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -7,25 +6,24 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
+
 import java.util.ArrayList;
 
-//Skapa en MongoDBFasad som kan hantera CRUD (Create, Read, Update, Delete)
 public class Facade {
-    MongoClient mongoCli;
+
+    MongoClient mongoCl;
     MongoDatabase mongoDb;
     MongoCollection<Document> mongoColl;
-
     String connStr;
     String collName;
     String dBName;
 
-    public Facade(String collName, String dBName) {
-        setConnStr("mongodb://localhost:27017");
-        setCollName(collName);
+    public Facade(String connStr, String dBName, String collName) {
+        setConnStr(connStr);
         setdBName(dBName);
+        setCollName(collName);
         connectToMongoServer();
     }
-
     public Facade() {
         connectToMongoServer();
     }
@@ -47,102 +45,63 @@ public class Facade {
     public void setdBName(String dBName) {
         this.dBName = dBName;
     }
-
     public void connectToMongoServer() {
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
 
-        MongoClientSettings set = MongoClientSettings.builder()
+        MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connStr))
                 .serverApi(serverApi)
                 .build();
+
         try {
-            mongoCli = MongoClients.create(set);
-            mongoDb = mongoCli.getDatabase(dBName);
+            mongoCl = MongoClients.create(settings);
+            mongoDb = mongoCl.getDatabase(dBName);
             mongoColl = mongoDb.getCollection(collName);
+            System.out.println("Connected to DB: " + dBName);
         } catch (Exception mongo) {
             System.out.println("Failed to connect");
             System.out.println(mongo.getMessage());
         }
     }
-    public void insertOnePerson(Person person) { //create Person
+    public void insertOne(Person person) {
         Document doc = person.toDoc();
         doc.remove("_id");
 
-        var findDoc = mongoColl.find(doc);
-        if(findDoc.first() != null) mongoColl.insertOne(doc);
+        var find = mongoColl.find(doc);
+        if (find.first() == null) {
+            mongoColl.insertOne(doc);
+        }
     }
-
-    public void insertOneClient(Client client) { //create Client
-        Document doc = client.toDoc();
-        doc.remove("_customerId");
-
-        var findDoc = mongoColl.find(doc);
-        if(findDoc.first() != null) mongoColl.insertOne(doc);
+    public void readPersons() {
+        FindIterable<Document> result = mongoColl.find();
+        for(Document res : result) {
+            System.out.println(res.toJson());
+        }
     }
-
-    public void insertOneEmployee(Employee employee) { //create Employee
-        Document doc = employee.toDoc();
-        doc.remove("_employeeId");
-
-        var findDoc = mongoColl.find(doc);
-        if(findDoc.first() != null) mongoColl.insertOne(doc);
-    }
-
-    public ArrayList<Person> findPersonByName(String name) {
+    public ArrayList<Person> findByName(String name) {
         Document doc = new Document("name", name);
-        FindIterable<Document> found = mongoColl.find(doc);
+        FindIterable<Document> result = mongoColl.find(doc);
         ArrayList<Person> persons = new ArrayList<>();
-        found.forEach(person -> persons.add(Person.fromDoc(person)));
-    return persons;
+
+        result.forEach(person -> persons.add(Person.fromDoc(person)));
+        return persons;
+    }
+    public Person findById(String id) {
+        Document doc = new Document("id", id);
+        Document search = mongoColl.find(doc).first();
+        return Person.fromDoc(search);
     }
 
-    public ArrayList<Client> findClientByName(String name) {
-        Document doc = new Document("name", name);
-        FindIterable<Document> found = mongoColl.find(doc);
-        ArrayList<Client> clients = new ArrayList<>();
-        found.forEach(client -> clients.add((Client) Client.fromDoc(client)));
-
-        return clients;
-    }
-    public ArrayList<Employee> findEmployeeByName(String name) {
-        Document doc = new Document("name", name);
-        FindIterable<Document> found = mongoColl.find(doc);
-        ArrayList<Employee> employees = new ArrayList<>();
-        found.forEach(employee -> employees.add((Employee) Employee.fromDoc(employee)));
-
-        return employees;
-    }
-    public Person findAnyOneById(String id) { //få fram instans av objekt?
-        if (id.equalsIgnoreCase("_id")) {
-            Document doc = new Document("_id", id);
-            Document found = mongoColl.find(doc).first();
-            return Person.fromDoc(found);
-        } else if (id.equalsIgnoreCase("_customerId")) {
-            Document doc = new Document("_custumerId", id);
-            Document found = mongoColl.find(doc).first();
-            return Client.fromDoc(found);
-        } else {
-            Document doc = new Document("_employeeId", id);
-            Document found = mongoColl.find(doc).first();
-            return Employee.fromDoc(found);
-
-        }
+    public void updatePerson(String nameToRemove, String nameToAdd) {
+        Document doc = new Document("name", nameToRemove);
+        Document update = new Document("name", nameToAdd);
+        mongoColl.findOneAndReplace(doc, update);
     }
 
-
-    public void deleteAnyone(String id) {
-        if(id.equalsIgnoreCase("_id")) {
-            Document doc = new Document("_id", id);
-            mongoColl.deleteOne(doc);
-        } else if (id.equalsIgnoreCase("_customerId")) {
-            Document doc = new Document("_customerId", id);
-            mongoColl.deleteOne(doc);
-        } else {
-            Document doc = new Document("_employeeId", id);
-            mongoColl.deleteOne(doc);
-        }
-
+    public void deletePerson(String id) {
+        Document doc = new Document("id", id);
+        mongoColl.deleteOne(doc);
     }
 }

@@ -54,24 +54,24 @@ public class Person {
             return new Person("", "", "");
         } else {
             return new Person(
-                    doc.getString("_id"),
                     doc.getString("name"),
+                    doc.getString("_id"),
                     doc.getString("age"),
                     doc.getString("address")
             );
         }
     }
 
+    public Document toDoc() {
+        return new Document("name", name)
+                .append("_id", _id)
+                .append("age", age)
+                .append("address", address);
+    }
+
     public Person fromJson(String json) {
         Document doc = Document.parse(json);
         return fromDoc(doc);
-    }
-
-    public Document toDoc() {
-        return new Document("_id", _id)
-                .append("name", name)
-                .append("age", age)
-                .append("address", address);
     }
 
     public String toJson() {

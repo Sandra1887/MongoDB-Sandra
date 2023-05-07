@@ -22,22 +22,10 @@ public class Employee extends Person {
         return "EmployeeID: " + _employeeId + ". " + super.getName() + " (" + super.getAge() + ") " +
                 " at " + super.getAddress();
     }
-
-    public static Person fromDoc(Document doc) {
-        if (doc == null) {
-            return new Client("", "", "", "");
-        } else {
-            return new Client(
-                    doc.getString("name"),
-                    doc.getString("age"),
-                    doc.getString("address"),
-                    doc.getString("_customerID"));
-        }
-    }
     @Override
     public Document toDoc() {
-        return new Document("_employeeID", _employeeId)
-                .append("name", super.getName())
+        return new Document("name", super.getName())
+                .append("_employeeID", _employeeId)
                 .append("age", super.getAge())
                 .append("address", super.getAddress());
     }

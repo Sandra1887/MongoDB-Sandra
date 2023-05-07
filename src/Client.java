@@ -25,21 +25,10 @@ public class Client extends Person{
         return "CustomerID: " + _customerId + ". " + super.getName() + " (" + super.getAge() + ") " +
                 " at " + super.getAddress();
     }
-    public static Person fromDoc(Document doc) {
-        if (doc == null) {
-            return new Client("", "", "", "");
-        } else {
-            return new Client(
-                    doc.getString("name"),
-                    doc.getString("age"),
-                    doc.getString("address"),
-                    doc.getString("_customerID"));
-        }
-    }
     @Override
     public Document toDoc() {
-        return new Document("_customerid", _customerId)
-                .append("name", super.getName())
+        return new Document("name", super.getName())
+                .append("_customerid", _customerId)
                 .append("age", super.getAge())
                 .append("address", super.getAddress());
     }
