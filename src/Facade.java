@@ -66,34 +66,73 @@ public class Facade {
             System.out.println(mongo.getMessage());
         }
     }
-    public void insertOnePerson(Person person) {
+    public void insertOnePerson(Person person) { //create Person
         Document doc = person.toDoc();
-        doc.remove("_id"); //Hur göra med olika _id?
+        doc.remove("_id");
 
         var findDoc = mongoColl.find(doc);
         if(findDoc.first() != null) mongoColl.insertOne(doc);
     }
 
-    public ArrayList<Person> findByName(String name) {
+    public void insertOneClient(Client client) { //create Client
+        Document doc = client.toDoc();
+        doc.remove("_customerId");
+
+        var findDoc = mongoColl.find(doc);
+        if(findDoc.first() != null) mongoColl.insertOne(doc);
+    }
+
+    public void insertOneEmployee(Employee employee) { //create Employee
+        Document doc = employee.toDoc();
+        doc.remove("_employeeId");
+
+        var findDoc = mongoColl.find(doc);
+        if(findDoc.first() != null) mongoColl.insertOne(doc);
+    }
+
+    public ArrayList<Person> findPersonByName(String name) {
         Document doc = new Document("name", name);
         FindIterable<Document> found = mongoColl.find(doc);
         ArrayList<Person> persons = new ArrayList<>();
-
-        for(Document d : found) {
-            persons.add(new Person(d.getString("name"),
-                    d.getString("age"),
-                    d.getString("address")));
-        }
+        found.forEach(person -> persons.add(Person.fromDoc(person)));
     return persons;
     }
 
-    public Person findById(String id) { //få fram instans av objekt?
-        Document doc = new Document("_id", id);
-        Document found = mongoColl.find(doc).first();
-        return Person.fromDoc(found);
+    public ArrayList<Client> findClientByName(String name) {
+        Document doc = new Document("name", name);
+        FindIterable<Document> found = mongoColl.find(doc);
+        ArrayList<Client> clients = new ArrayList<>();
+        found.forEach(client -> clients.add((Client) Client.fromDoc(client)));
+
+        return clients;
+    }
+    public ArrayList<Employee> findEmployeeByName(String name) {
+        Document doc = new Document("name", name);
+        FindIterable<Document> found = mongoColl.find(doc);
+        ArrayList<Employee> employees = new ArrayList<>();
+        found.forEach(employee -> employees.add((Employee) Employee.fromDoc(employee)));
+
+        return employees;
+    }
+    public Person findAnyOneById(String id) { //få fram instans av objekt?
+        if (id.equalsIgnoreCase("_id")) {
+            Document doc = new Document("_id", id);
+            Document found = mongoColl.find(doc).first();
+            return Person.fromDoc(found);
+        } else if (id.equalsIgnoreCase("_customerId")) {
+            Document doc = new Document("_custumerId", id);
+            Document found = mongoColl.find(doc).first();
+            return Client.fromDoc(found);
+        } else {
+            Document doc = new Document("_employeeId", id);
+            Document found = mongoColl.find(doc).first();
+            return Employee.fromDoc(found);
+
+        }
     }
 
-    public void deletePerson(String id) {
+
+    public void deleteAnyone(String id) {
         if(id.equalsIgnoreCase("_id")) {
             Document doc = new Document("_id", id);
             mongoColl.deleteOne(doc);
