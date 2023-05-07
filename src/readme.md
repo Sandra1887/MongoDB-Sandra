@@ -70,9 +70,9 @@ by Sandra Jeppsson Kristiansson
 *Then the forEach-adds each Person-object to the ArrayList.*
 
 
-+ ^5. Receives the id(String) that is wished to be searched for. Creates a new document and adds 
-the id to it. Then compares it with the documents in the collections and, if found, sends it 
-to "fromDoc" which creates a new object from the document.
++ *^5. Receives the id(String) that is wished to be searched for. Creates a new document and adds*
+*the id to it. Then compares it with the documents in the collections and, if found, sends it* 
+*to "fromDoc" which creates a new object from the document.*
 
 
 + *^6. Receives the name(String) that you want to update and the name(String) that you want to change*
