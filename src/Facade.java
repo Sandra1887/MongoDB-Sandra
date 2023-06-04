@@ -94,10 +94,11 @@ public class Facade {
         return Person.fromDoc(search);
     }
 
-    public void updatePerson(String nameToUpdate, String nameToAdd) {
+    public void updatePerson(String nameToUpdate, Person person) {
         Document doc = new Document("name", nameToUpdate);
-        Document update = new Document("name", nameToAdd);
-        mongoCollection.findOneAndReplace(doc, update);
+        Document doc2 = person.toDoc();
+        doc2.remove("_id");
+        mongoCollection.findOneAndReplace(doc, doc2);
     }
 
     public void deletePerson(String id) {

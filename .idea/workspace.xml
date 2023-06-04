@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04643078-c7d4-4f89-a74d-f914eacbecd8" name="Changes" comment="readme" />
+    <list default="true" id="04643078-c7d4-4f89-a74d-f914eacbecd8" name="Changes" comment="readmeFixed">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Facade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Facade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,7 +80,25 @@
       <option name="presentableId" value="LOCAL−00004" />
       <updated>1683483844860</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL−00005" summary="readmeFixed">
+      <created>1683483983662</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1683483983662</updated>
+    </task>
+    <task id="LOCAL−00006" summary="readmeFixed">
+      <created>1683484059126</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1683484059126</updated>
+    </task>
+    <task id="LOCAL−00007" summary="readmeFixed">
+      <created>1683484123411</created>
+      <option name="number" value="LOCAL−00007" />
+      <option name="presentableId" value="LOCAL−00007" />
+      <updated>1683484123411</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -84,6 +106,7 @@
     <MESSAGE value="main" />
     <MESSAGE value="Working CRUD" />
     <MESSAGE value="readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme" />
+    <MESSAGE value="readmeFixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="readmeFixed" />
   </component>
 </project>
