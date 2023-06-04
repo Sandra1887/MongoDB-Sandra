@@ -75,9 +75,10 @@ by Sandra Jeppsson Kristiansson
 *to "fromDoc" which creates a new object from the document.*
 
 
-+ *^6. Receives the name(String) that you want to update and the name(String) that you want to change*
-*it to. Then adds the "nameToUpdate" to a new document and the "nameToAdd" to another. Next step*
-*it uses the MongoCollection's method "findOneAndReplace" to replace the old name with the new one.*
++ *^6. Receives the name(String) that you want to update and a is replaced with a new Person in which*
+*you can change whatever you want. Then adds the "nameToUpdate" to a new document and the "nameToAdd"*
+*to another. Next step it uses the MongoCollection's method "findOneAndReplace" to replace the old name*
+*with the new one.*
 
 
 + *^7. Receives the id(String) that is wished to remove. Then adds the id to a new document which is*
@@ -85,7 +86,15 @@ by Sandra Jeppsson Kristiansson
 
 
 ``` Java
-
+System.out.println("REFLECTIONS: My personal favourite is SQL since it feels much more organized and easier to read due
+to its tables. I also feel that it's an easier and more structured "language" to understand and use. I'd also say that 
+I'm under the impression that SQL facilitates searching for something specific in the database. Although MongoDB also 
+has it's  upsides while in some occations you'd want to save and organize more information about something or someone.
+For an example, journal data for students, patients etc. where a documentation database definitely is the better option
+since it's more flexible when there's a larger amount of information about something. To make it more clear: 
+We earlier made a movie database where we used SQLite. The movie attributes were "title, year, genre, actors and plot"
+where the last one obviously includes (mostly) a bit more data - which, according to me, would fit better with
+MongoDB. BUT, if we'd exclude the "plot" - I'd say that SQLite is a better match.");
 ```
 ***Java***
 
